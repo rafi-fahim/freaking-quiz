@@ -14,13 +14,17 @@ export default function QuizHome() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-950 p-6">
-      <div className="max-w-md w-full bg-neutral-800  p-6 rounded-lg shadow">
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="max-w-md w-full bg-[#3a3b44] p-6 rounded-lg border border-[#4a4b52]">
         <h1 className="text-2xl font-bold mb-4">Math Quiz — 30 MCQs</h1>
-        <label className="block mb-2 text-sm">Your name</label>
-        <input value={name} onChange={(e) => setName(e.target.value)} className="w-full p-3 border rounded mb-4" placeholder="Enter name" />
-        <p className="text-sm text-gray-500 mb-4">You have 30 minutes. Once you select an answer for a question it cannot be changed.</p>
-        <button onClick={start} className="w-full py-3 rounded bg-blue-600 text-white">Start Quiz</button>
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Enter your name"
+          className="w-full p-3 rounded mb-4 bg-[#2f3035] text-[#E6E7E9] border border-[#4a4b52]"
+        />
+        <p className="text-sm text-[#bfc3c6] mb-4">You will have 30 minutes. Once you select an answer it cannot be changed.</p>
+        <button onClick={start} className="w-full py-3 rounded bg-[#7c93ff] text-black font-semibold hover:opacity-95">Start Quiz</button>
       </div>
     </div>
   );

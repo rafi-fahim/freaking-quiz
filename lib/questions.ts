@@ -1,10 +1,10 @@
 // lib/questions.ts
 export type Q = {
-  id: string;           // unique id like "q1"
+  id: string;
   text: string;
-  image?: string | null; // relative path or URL
-  choices: string[];    // exactly 4 entries
-  answerIndex: number;  // 0..3 (correct choice)
+  image?: string | null;
+  choices: string[]; // length 4
+  answerIndex: number; // 0..3
 };
 
 export const QUESTIONS: Q[] = [
@@ -20,5 +20,5 @@ export const QUESTIONS: Q[] = [
     choices: ["3", "4", "5", "6"],
     answerIndex: 1,
   },
-  // ... add up to 30
+  // add up to 30 questions here...
 ];

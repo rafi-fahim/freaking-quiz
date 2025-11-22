@@ -1,3 +1,4 @@
+// components/QuestionCard.tsx
 "use client";
 import React from "react";
 import { Q } from "@/lib/questions";
@@ -11,64 +12,43 @@ type Props = {
   onSelect: (qId: string, choiceIndex: number) => void;
 };
 
-export default function QuestionCard({
-  q,
-  index,
-  selectedIndex,
-  locked,
-  showResults,
-  onSelect,
-}: Props) {
+export default function QuestionCard({ q, index, selectedIndex, locked, showResults, onSelect }: Props) {
   return (
-    <div className="mb-6 p-4 border rounded-lg bg-neutral-800 border-neutral-700 text-neutral-200 shadow">
-      <div className="flex justify-between items-start mb-2">
-        <div className="font-medium">Q{index + 1}. {q.text}</div>
-      </div>
+    <div className="mb-6 p-4 rounded-lg bg-[#3a3b44] border border-[#4a4b52] text-[#E6E7E9] shadow">
+      <div className="mb-2 font-medium">Q{index + 1}. {q.text}</div>
 
       {q.image && (
         <div className="mb-3">
-          <img
-            src={q.image}
-            alt={`q${index + 1}`}
-            className="max-w-full h-auto rounded border border-neutral-700"
-          />
+          <img src={q.image} alt={`q${index + 1}`} className="max-w-full h-auto rounded border border-neutral-600" />
         </div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {q.choices.map((choice, ci) => {
-          let base =
-            "p-3 text-left rounded border transition-colors duration-150 font-medium";
-          let state = "bg-neutral-700 text-neutral-200 border-neutral-600";
+          const isSelected = selectedIndex === ci;
+          let classes = "p-3 rounded border font-medium transition-colors";
 
           if (!showResults) {
-            if (selectedIndex === ci) {
-              state = "bg-blue-600 text-white border-blue-700";
-            }
+            // before submit
+            classes += isSelected ? " bg-blue-600 text-white border-blue-700" : " bg-[#2f3035] text-[#E6E7E9] border-[#4a4b52] hover:shadow";
+            if (locked && !isSelected) classes += " opacity-70 cursor-not-allowed";
           } else {
+            // after submit: correct green, selected wrong red, others muted
             if (ci === q.answerIndex) {
-              state = "bg-green-600 text-white border-green-700";
-            } else if (selectedIndex === ci && ci !== q.answerIndex) {
-              state = "bg-red-600 text-white border-red-700";
+              classes += " bg-[#22c55e] text-black border-[#16a34a]";
+            } else if (isSelected && ci !== q.answerIndex) {
+              classes += " bg-[#ef4444] text-black border-[#dc2626]";
             } else {
-              state = "bg-neutral-700 text-neutral-400 border-neutral-600 opacity-80";
+              classes += " bg-[#2f3035] text-[#bfc3c6] border-[#4a4b52] opacity-90";
             }
-          }
-
-          // If answer locked and this isn't selected
-          if (locked && selectedIndex !== ci && !showResults) {
-            state += " opacity-60 cursor-not-allowed";
           }
 
           return (
             <button
               key={ci}
-              onClick={() => {
-                if (locked) return;
-                onSelect(q.id, ci);
-              }}
+              onClick={() => { if (!locked) onSelect(q.id, ci); }}
               disabled={locked}
-              className={`${base} ${state}`}
+              className={classes}
             >
               {String.fromCharCode(65 + ci)}. {choice}
             </button>
@@ -79,21 +59,11 @@ export default function QuestionCard({
       {showResults && (
         <div className="mt-3 text-sm">
           {selectedIndex === null ? (
-            <span className="text-orange-400">
-              Not answered — correct:{" "}
-              <span className="font-semibold text-neutral-100">
-                {q.choices[q.answerIndex]}
-              </span>
-            </span>
+            <span className="text-orange-300">Not answered — correct: <span className="font-semibold text-[#E6E7E9]">{q.choices[q.answerIndex]}</span></span>
           ) : selectedIndex === q.answerIndex ? (
-            <span className="text-green-400 font-semibold">Correct ✓</span>
+            <span className="text-[#16a34a] font-semibold">Correct ✓</span>
           ) : (
-            <span className="text-red-400 font-semibold">
-              Wrong ✗ — Correct:{" "}
-              <span className="font-semibold text-neutral-100">
-                {q.choices[q.answerIndex]}
-              </span>
-            </span>
+            <span className="text-[#ef4444] font-semibold">Wrong ✗ — Correct: <span className="font-semibold text-[#E6E7E9]">{q.choices[q.answerIndex]}</span></span>
           )}
         </div>
       )}
